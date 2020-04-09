@@ -48,7 +48,7 @@ const BookList = ({ books, bookstoreService, booksLoaded, setLoading, loading, b
     )
 }
 
-const mapStateToProps = ({ books, loading, error }) => {
+const mapStateToProps = ({booklist:{ books, loading, error }}) => {
     return {
         books,
         loading,
