@@ -1,0 +1,11 @@
+.book-list-item img{
+    height: 14em;
+}
+
+.book-list-item .img-wrapper{
+    overflow: hidden;
+}
+
+.book-list-item .title{
+    color: blue;
+}
