@@ -4,28 +4,18 @@ import { compose } from 'redux'
 
 import BookListItem from '../book-list-item'
 import { withBookstoreService } from '../hoc'
-import { booksLoaded, setLoading, booksError, onAddedToCart } from '../../actions'
+import { fetchBooks, unmountBook, onAddedToCart } from '../../actions'
 import Spinner from '../spinner'
 import ErrorIndicator from '../error-indicator'
 
-const BookList = ({ books, bookstoreService, booksLoaded, setLoading, loading, booksError, error, onAddedToCart }) => {
+const BookList = ({ books, bookstoreService, loading, error, onAddedToCart, fetchBooks, unmountBook }) => {
 
     useEffect(() => {
-        const getBooks = async () => {
-            try {
-                const data = await bookstoreService.getBooks()
-                booksLoaded(data)
-            } catch (err) {
-                booksError('Books Loading Error')
+        fetchBooks(bookstoreService)
+            return ()=>{
+                unmountBook()
             }
-        }
-
-        getBooks()
-
-        return () => {
-            setLoading()
-        }
-    }, [booksLoaded, bookstoreService, setLoading, booksError])
+    }, [bookstoreService, fetchBooks, unmountBook])
 
     if (loading)
         return <Spinner />
@@ -48,7 +38,7 @@ const BookList = ({ books, bookstoreService, booksLoaded, setLoading, loading, b
     )
 }
 
-const mapStateToProps = ({booklist:{ books, loading, error }}) => {
+const mapStateToProps = ({ booklist: { books, loading, error } }) => {
     return {
         books,
         loading,
@@ -56,11 +46,14 @@ const mapStateToProps = ({booklist:{ books, loading, error }}) => {
     }
 }
 
-const mapDispatchToProps = {
-    booksLoaded,
-    setLoading,
-    booksError,
-    onAddedToCart
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchBooks: (bookstoreService)=>{
+            fetchBooks(bookstoreService, dispatch)
+        },
+        onAddedToCart: (id)=>{dispatch(onAddedToCart(id))},
+        unmountBook:()=>{dispatch(unmountBook())}
+    }
 }
 
 export default compose(
