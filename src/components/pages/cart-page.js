@@ -1,6 +1,14 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import {connect} from 'react-redux'
 
-const CartPage = ()=>{
+import {setPathname} from '../../actions'
+
+const CartPage = ({match, setPathname})=>{
+    
+    // useEffect(()=>{
+    //     setPathname(match.path)
+    // })
+
     return(
         <div>
             Cart Page
@@ -8,4 +16,8 @@ const CartPage = ()=>{
     )
 }
 
-export default CartPage
+const mapDispatchToProps = {
+    setPathname
+}
+
+export default connect(null, mapDispatchToProps)(CartPage)

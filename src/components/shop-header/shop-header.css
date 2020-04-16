@@ -1,3 +1,13 @@
 .shop-header .logo{
     font-size: 2em;
 }
+
+.shop-header .menu{
+    z-index: 1;
+    background-color: white;
+    right: 0;
+}
+
+.shop-header .pointer{
+    cursor: pointer;
+}

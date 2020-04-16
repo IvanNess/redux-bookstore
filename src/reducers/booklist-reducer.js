@@ -7,10 +7,15 @@ const booklistReducer = (state, {type, payload}) => {
         }
     switch (type) {
         case 'FETCH_BOOKS_REQUEST':
+            return {
+                books: state.booklist.books,
+                loading: true,
+                error: null
+            }
         case 'UNMOUNT_BOOK':
             return {
                 books: [],
-                loading: true,
+                loading: false,
                 error: null
             }
         case 'FETCH_BOOKS_SUCCESS':

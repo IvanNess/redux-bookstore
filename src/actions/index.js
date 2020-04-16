@@ -1,9 +1,10 @@
-const fetchBooks = async (bookstoreService, dispatch) => {
+const fetchBooks =  (bookstoreService) => async (dispatch) => {
+    dispatch(booksRequested())
     try {
         const books = await bookstoreService.getBooks()
-        return dispatch(booksLoaded(books))
+        dispatch(booksLoaded(books))
     } catch (err) {
-        return dispatch(booksError('Books fetch error!!!'))
+        dispatch(booksError('Books fetch error!!!'))
     }
 }
 
@@ -39,8 +40,71 @@ const onDelete = (id) => {
     return { type: 'ALL_BOOKS_REMOVED_FROM_CART', payload: id }
 }
 
-const login = ({name, password}) =>{
+const onLogin = ({name, password, serverService, order}) =>async (dispatch)=>{
+    dispatch(userRequest())
+    try {
+        let user = await serverService.getUser({name, password})
+        if(order!==null)
+            user = await serverService.addOrder({userId: user.id, order})
+        dispatch(userLoaded({user}))
+    } catch (err) {
+        dispatch(userError('login error!!!'))
+    }   
+}
 
+const onSignup = ({name, password, email, bookstoreService: serverService, order})=>async dispatch=>{
+    dispatch(createUserRequest())
+    try{
+        const user = await serverService.createUser({name, email, password, order})
+        console.log('on signup user', user)
+        dispatch(userCreated(user))
+    } catch(err){
+        console.log('err', err)
+        dispatch(createUserError(err))
+    }
+}
+
+const makeOrder = ({userId, serverService, order}) =>async (dispatch)=>{
+    dispatch(userRequest())
+    try {
+        console.log('make order', userId)
+        const user = await serverService.addOrder({userId, order})
+        dispatch(userLoaded({user}))
+    } catch (err) {
+        dispatch(userError('login error!!!'))
+    }   
+}
+
+const userRequest = () =>{
+    return {type: 'FETCH_USER_REQUEST'}
+}
+
+const userLoaded = ({user}) =>{
+    return {type: 'FETCH_USER_SUCCESS', payload: user}
+}
+
+const userError = (message) =>{
+    return {type: 'FETCH_USER_FAILURE', payload: message}
+}
+
+const createUserRequest = ()=>{
+    return {type: 'CREATE_USER_REQUEST'}
+}
+
+const userCreated = (user) =>{
+    return {type: 'CREATE_USER_SUCCESS', payload: user}
+}
+
+const createUserError = (message) =>{
+    return {type: 'CREATE_USER_FAILURE'}
+}
+
+const setPathname = (pathname)=>{
+    return {type: 'SET_PATHNAME', payload: pathname}
+}
+
+const logout = ()=>{
+    return {type: 'LOGOUT'}
 }
 
 export {
@@ -51,5 +115,9 @@ export {
     onDecrease,
     onDelete,
     unmountBook,
-    login
+    onLogin,
+    onSignup,
+    setPathname,
+    logout,
+    makeOrder
 }

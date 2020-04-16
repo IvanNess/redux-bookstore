@@ -34,6 +34,10 @@ const updateCartItems = ({ cartItems, newCartItem, idx }) => {
     ]
 }
 
+const updateOrderTotal = ({orderTotal, upload, book})=>{
+    return orderTotal + upload * book.price
+}
+
 const shoppingCartReducer = (state, {type, payload})=>{
     if(state===undefined){
         return{
@@ -46,7 +50,7 @@ const shoppingCartReducer = (state, {type, payload})=>{
         case 'BOOK_REMOVED_FROM_CART':
         case 'ALL_BOOKS_REMOVED_FROM_CART':
             const bookId = payload
-            const { cartItems } = state.shoppingCart
+            const { cartItems, orderTotal } = state.shoppingCart
             const book = state.booklist.books.find(book => book.id === bookId)
             const cartItemBookIdx = cartItems.findIndex(book => book.id === bookId)
             // если cartItemBookIdx===-1, то ошибки не будет, cartItem будет равен undefined
@@ -55,9 +59,18 @@ const shoppingCartReducer = (state, {type, payload})=>{
                 type === 'BOOK_REMOVED_FROM_CART' ? -1 : -cartItem.count
             const newCartItem = updateCartItem({ cartItem, book, upload })
             const newCartItems = updateCartItems({ cartItems, newCartItem, idx: cartItemBookIdx })
+            const newOrderTotal = updateOrderTotal({orderTotal, upload, book})
             return {
-                ...state,
+                orderTotal: newOrderTotal,
                 cartItems: newCartItems
+            }
+        case 'CREATE_USER_SUCCESS':
+        case 'FETCH_USER_SUCCESS':
+            return{
+                // если при создании юзера отправляется массив с заказами, то это значит, что
+                // это отправляется заказ и нужно освободить корзину.
+                cartItems: payload.orders.length > 0? []: state.shoppingCart.cartItems,
+                orderTotal: payload.orders.length > 0? 0: state.shoppingCart.orderTotal,
             }
         default:
             return state.shoppingCart

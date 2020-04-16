@@ -1,11 +1,22 @@
 import React, { useState } from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { Redirect, NavLink } from 'react-router-dom'
 
-import {login} from '../../actions'
+import { onLogin } from '../../actions'
+import ErrorIndicator from '../error-indicator'
+import { withBookstoreService } from '../hoc'
 
-const LoginPage = ({login}) => {
+const LoginPage = ({ onLogin, user, bookstoreService: serverService, shoppingCart }) => {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
+    const { error, id } = user
+
+    if (id)
+        return <Redirect to='/profile' />
+
+    if (error)
+        return <ErrorIndicator />
 
     return (
         <div className='row'>
@@ -14,26 +25,33 @@ const LoginPage = ({login}) => {
                     <p className='h6 text-center'>Login Page</p>
                     username:
                         <input
-                            type='text'
-                            placeholder='username'
-                            className='mb-2 w-100 font-italic small'
-                            onChange={(e)=>setName(e.target.value)}
-                            value={name}
-                        />
+                        type='text'
+                        placeholder='username'
+                        className='mb-2 w-100 font-italic small form-control'
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
+                    />
                     password:
-                        <input 
-                            type='password' 
-                            placeholder='password' 
-                            className='mb-2 w-100 font-italic small'
-                            onChange={(e)=>{setPassword(e.target.value)}}
-                            value={password}
-                        />
+                        <input
+                        type='password'
+                        placeholder='password'
+                        className='mb-2 w-100 font-italic small form-control'
+                        onChange={(e) => { setPassword(e.target.value) }}
+                        value={password}
+                    />
                     <button
                         className='btn btn-primary w-100 btn-sm'
-                        onClick={()=>login({name, password})}
+                        onClick={() => {
+                            const isConfirmed = document.location.search==='?redirect=confirm'
+                            const order = isConfirmed? shoppingCart: null
+                            onLogin({ name, password, serverService, order })
+                        }}
                     >
-                        Sign in
+                        Log in
                     </button>
+                    <NavLink className='text-right pt-2' to={document.location.search==='?redirect=confirm'?'/signup?redirect=confirm':'/signup'}>
+                        <u>...or create an account</u>
+                    </NavLink>
                 </div>
 
             </div>
@@ -41,8 +59,16 @@ const LoginPage = ({login}) => {
     )
 }
 
+const mapStateToProps = ({ user, shoppingCart }) => ({
+    user,
+    shoppingCart
+})
+
 const mapDispatchToProps = {
-    login
+    onLogin
 }
 
-export default connect(null, mapDispatchToProps)(LoginPage)
+export default compose(
+    withBookstoreService(),
+    connect(mapStateToProps, mapDispatchToProps)
+)(LoginPage)

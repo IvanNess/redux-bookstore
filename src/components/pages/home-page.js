@@ -1,11 +1,16 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import BookList from '../book-list'
 
 const HomePage = ()=>{
+
+    useEffect(()=>{
+        console.log('home page props')
+    }, )
+
     return(
         <div>
-            <BookList />
+            <BookList/>
         </div>
     )
 }

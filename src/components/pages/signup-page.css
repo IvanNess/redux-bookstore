@@ -1,0 +1,15 @@
+.signup-page .error-message{
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+}
+
+.signup-page .field-div{
+    margin-bottom: 3px;
+    margin-top: 3px;
+}
+
+.signup-page .form-control::placeholder{
+    font-style: italic;
+    font-size: 0.8em;
+}

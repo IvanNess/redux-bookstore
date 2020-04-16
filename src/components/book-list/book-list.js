@@ -8,23 +8,28 @@ import { fetchBooks, unmountBook, onAddedToCart } from '../../actions'
 import Spinner from '../spinner'
 import ErrorIndicator from '../error-indicator'
 
-const BookList = ({ books, bookstoreService, loading, error, onAddedToCart, fetchBooks, unmountBook }) => {
+const BookList = ({
+    books, bookstoreService, loading, error, onAddedToCart, fetchBooks, unmountBook
+}) => {
 
     useEffect(() => {
+        console.log('booklist useeffect')
+    })
+
+    useEffect(() => {
+        console.log('booklist')
+
         fetchBooks(bookstoreService)
-            return ()=>{
-                unmountBook()
-            }
-    }, [bookstoreService, fetchBooks, unmountBook])
+        return () => {
+            //unmountBook()
+        }
+    }, [unmountBook, fetchBooks, bookstoreService])
 
-    if (loading)
-        return <Spinner />
-
-    if (error)
-        return <ErrorIndicator />
 
     return (
         <div className='row'>
+            {error && <ErrorIndicator />}
+            {loading && <Spinner />}
             {books.map(book => {
                 return (
                     <BookListItem
@@ -46,14 +51,10 @@ const mapStateToProps = ({ booklist: { books, loading, error } }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchBooks: (bookstoreService)=>{
-            fetchBooks(bookstoreService, dispatch)
-        },
-        onAddedToCart: (id)=>{dispatch(onAddedToCart(id))},
-        unmountBook:()=>{dispatch(unmountBook())}
-    }
+const mapDispatchToProps = {
+    fetchBooks,
+    onAddedToCart,
+    unmountBook
 }
 
 export default compose(
