@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import { HomePage, CartPage, LoginPage, SignupPage } from '../pages'
+import { HomePage, CartPage, LoginPage, SignupPage, ProfilePage } from '../pages'
 import ShopHeader from '../shop-header'
 import ShoppingCartTable from '../shopping-cart-table'
 
@@ -27,7 +27,7 @@ const App = () => {
                         />
                         <Route
                             path='/profile'
-                            component={CartPage}
+                            component={ProfilePage}
                         />
                     </Switch>
                     <ShoppingCartTable />

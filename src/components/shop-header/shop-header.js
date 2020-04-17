@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, NavLink, Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 
@@ -19,7 +19,7 @@ const ShopHeader = (props) => {
         console.log('useeffect shopheader')
         setShowMenu(false)
         setRedirect('')
-    }, [redirect, user])
+    }, [redirect, user, total])
 
     // if(redirect==='/profile'){
     //     console.log('redirect to /profile')
@@ -48,7 +48,7 @@ const ShopHeader = (props) => {
             </div>
 
             {user.name && <div className='align-self-center col-6 row justify-content-between'>
-                <div className='col-6 d-flex flex-column'>
+                <div className='col-6 d-flex flex-column bg-light rounded-bottom rounded-lg'>
                     <div className='text-center'>
                         <div
                             className='logo text-blue text-decoration-none pointer'
@@ -59,7 +59,7 @@ const ShopHeader = (props) => {
                             }}>
                             {user.name}
                         </div>
-                        {showMenu && <div className='position-absolute menu '>
+                        {showMenu && <div className='position-absolute menu'>
                             {/* <Link className='text-dark text-decoration-none' to={function(location){
                                 //fetchBooks(bookstoreService)
                                 console.log('profile')
@@ -67,13 +67,13 @@ const ShopHeader = (props) => {
                             }}>
                                 Profile
                             </Link> */}
-                            <div className='pointer' onClick={() => {
+                            <div className='pointer px-5 bg-light' onClick={() => {
                                 setShowMenu(false)
                                 setRedirect('/profile')
                             }}>
                                 Profile
                             </div>
-                            <div className='pointer' onClick={() => {
+                            <div className='pointer px-5 bg-light' onClick={() => {
                                 logout()
                             }}>
                                 Logout

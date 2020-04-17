@@ -11,12 +11,33 @@ const LoginPage = ({ onLogin, user, bookstoreService: serverService, shoppingCar
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const { error, id } = user
+    // useEffect(()=>{
+    //     console.log('login page use effect')
+    //     return ()=>{
+    //         console.log('login page unmount')
+    //         document.removeEventListener('keydown', keydownFunc)
+    //     }
+    // }, [])
 
     if (id)
         return <Redirect to='/profile' />
 
     if (error)
         return <ErrorIndicator />
+
+    const onClick = () => {
+        const isConfirmed = document.location.search === '?redirect=confirm'
+        const order = isConfirmed ? shoppingCart : null
+        onLogin({ name, password, serverService, order })
+    }
+
+    // const keydownFunc = function (event) {
+    //     if (event.code == 'Enter'){
+    //         onClick()
+    //     }
+    // }
+
+    // document.addEventListener('keydown', keydownFunc);
 
     return (
         <div className='row'>
@@ -41,15 +62,11 @@ const LoginPage = ({ onLogin, user, bookstoreService: serverService, shoppingCar
                     />
                     <button
                         className='btn btn-primary w-100 btn-sm'
-                        onClick={() => {
-                            const isConfirmed = document.location.search==='?redirect=confirm'
-                            const order = isConfirmed? shoppingCart: null
-                            onLogin({ name, password, serverService, order })
-                        }}
+                        onClick={onClick}
                     >
                         Log in
                     </button>
-                    <NavLink className='text-right pt-2' to={document.location.search==='?redirect=confirm'?'/signup?redirect=confirm':'/signup'}>
+                    <NavLink className='text-right pt-2' to={document.location.search === '?redirect=confirm' ? '/signup?redirect=confirm' : '/signup'}>
                         <u>...or create an account</u>
                     </NavLink>
                 </div>
