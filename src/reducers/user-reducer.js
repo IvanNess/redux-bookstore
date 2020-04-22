@@ -4,7 +4,7 @@ const userReducer = (state, { type, payload }) => {
             id: null,
             name: null,
             email: null,
-            loading: true,
+            loading: false,//true работает точно. поставил фолс, чтобы кнопка сбановилась активна после ошибки при сайнапе
             error: null,
             orders: []
             // id: '4o',
@@ -24,7 +24,7 @@ const userReducer = (state, { type, payload }) => {
                 email: payload.email,
                 loading: false,
                 error: null,
-                orders: payload.orders
+                orders: payload.orders || []
             }
         case 'FETCH_USER_FAILURE':
         case 'CREATE_USER_FAILURE':
@@ -32,7 +32,7 @@ const userReducer = (state, { type, payload }) => {
                 id: null,
                 name: null,
                 email: null,
-                loading: true,
+                loading: false,//true работает точно. поставил фолс, чтобы кнопка сбановилась активна после ошибки при сайнапе
                 error: payload,
                 orders: []
             }

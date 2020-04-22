@@ -2,6 +2,7 @@ const fetchBooks =  (bookstoreService) => async (dispatch) => {
     dispatch(booksRequested())
     try {
         const books = await bookstoreService.getBooks()
+        console.log('books loaded', books)
         dispatch(booksLoaded(books))
     } catch (err) {
         dispatch(booksError('Books fetch error!!!'))
@@ -55,6 +56,7 @@ const onLogin = ({name, password, serverService, order}) =>async (dispatch)=>{
 const onSignup = ({name, password, email, bookstoreService: serverService, order})=>async dispatch=>{
     dispatch(createUserRequest())
     try{
+        console.log('order', order)
         const user = await serverService.createUser({name, email, password, order})
         console.log('on signup user', user)
         dispatch(userCreated(user))

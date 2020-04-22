@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-const CartItem = ({ idx, title, count, total }) => {
+const CartItem = ({ idx, book, total }) => {
+    const {title, price: count} = book
     return (
         <div className='cart-item row'>
             <div className='col-2'>{idx+1}</div>
@@ -23,13 +24,13 @@ const OrderHeader = () => {
     )
 }
 
-const Order = ({ cartItems, orderTotal, idx }) => {
+const Order = ({ cartItems, total, idx }) => {
     return (
         <div className='order border-top border-bottom'>
             {cartItems.map((item, idx) => <CartItem key={item.id} {...item} idx={idx} />)}
             <div className='row justify-content-end'>
                 <div className='col-2'>Order: {idx+1}</div>
-                <div className='col-2'>{`$(${orderTotal})`}</div>
+                <div className='col-2'>{`$(${total})`}</div>
             </div>
         </div>
     )

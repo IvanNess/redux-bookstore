@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import './spinner.css'
 
 const Spinner = ()=>{
+    useEffect(()=>{
+        console.log('spinner useeefect')
+    })
     return(
         <div className='spinner vh-100 vw-100 bg-transparent position-absolute row'>
             <div className='h-50 col-3  mx-auto row'>

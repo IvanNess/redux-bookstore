@@ -69,8 +69,8 @@ const shoppingCartReducer = (state, {type, payload})=>{
             return{
                 // если при создании юзера отправляется массив с заказами, то это значит, что
                 // это отправляется заказ и нужно освободить корзину.
-                cartItems: payload.orders.length > 0? []: state.shoppingCart.cartItems,
-                orderTotal: payload.orders.length > 0? 0: state.shoppingCart.orderTotal,
+                cartItems: payload.orders ? []: state.shoppingCart.cartItems,
+                orderTotal: payload.orders ? 0: state.shoppingCart.orderTotal,
             }
         default:
             return state.shoppingCart

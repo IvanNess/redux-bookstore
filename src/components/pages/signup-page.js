@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
@@ -9,6 +9,12 @@ import {onSignup} from '../../actions'
 import './signup-page.css'
 
 const SignupPage = ({ bookstoreService, onSignup, shoppingCart, user }) => {
+
+    useEffect(()=>{
+        if(user.error){
+            console.log('signup page useeffect', user)
+        }
+    },[user])
 
     if (user.id)
     return <Redirect to='/profile' />
@@ -39,6 +45,7 @@ const SignupPage = ({ bookstoreService, onSignup, shoppingCart, user }) => {
                     onSubmit={(values, { setSubmitting }) => {
                         const isConfirmed = document.location.search==="?redirect=confirm"
                         const order = isConfirmed? shoppingCart: null
+                        
                         onSignup({name: values.name, email:values.email, 
                             password:values.password, bookstoreService, order})
 
@@ -99,7 +106,7 @@ const SignupPage = ({ bookstoreService, onSignup, shoppingCart, user }) => {
                             </div>
 
                             <div className='col'>
-                                <button className='btn btn-primary btn-block mt-3' type="submit" disabled={isSubmitting}>
+                                <button className='btn btn-primary btn-block mt-3' type="submit" disabled={user.loading}>
                                     Submit
                                 </button>
                             </div>

@@ -1,0 +1,62 @@
+# import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
+
+type Query {
+  getBooks: [Book!]!
+  getUser(name: String!, password:String!): User!
+}
+
+type Mutation{
+  createUser(data: createUserInput!): User!
+  addOrder(user: ID!, order: [cartItemsInput!]!): User!
+  createOrder(user: ID!, order: [cartItemsInput!]!): Order!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  orders: [Order!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Order{
+  id: ID!
+  user: User!
+  total: Int
+  cartItems: [CartItem!]!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type CartItem{
+  id: ID!
+  count: Int!
+  total: Int!
+  book: Book!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Book{
+  id: ID!
+  title: String!
+  author: String!
+  price: Float!
+  createdAt: DateTime 
+  updatedAt: DateTime 
+}
+
+input createUserInput{
+  name: String!
+  email: String!
+  password: String!
+  order: [cartItemsInput]
+}
+
+input cartItemsInput{
+  count: Int!
+  total: Int!
+  book: ID!
+}
